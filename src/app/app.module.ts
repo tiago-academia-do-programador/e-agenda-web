@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarModule } from './navbar/navbar.module';
 import { AuthModule } from './auth/auth.module';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from './auth/services/auth.service';
 
 @NgModule({
   declarations: [

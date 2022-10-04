@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { AuthService } from '../services/auth.service';
 import { RegistrarUsuarioViewModel } from '../view-models/registrar-usuario.view-model';
+import { TokenViewModel } from '../view-models/token.view-model';
 
 @Component({
   selector: 'app-registro',
@@ -17,6 +19,7 @@ export class RegistroComponent implements OnInit {
   constructor(
     titulo: Title,
     private fb: FormBuilder,
+    private authService: AuthService
   ) {
     titulo.setTitle('Registro - e-Agenda');
   }
@@ -50,6 +53,19 @@ export class RegistroComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.registroVM = Object.assign({}, this.registroVM, this.form.value);
+
+    this.authService.registrarUsuario(this.registroVM)
+      .subscribe({
+        next: (registroRealizado) => this.processarSucesso(registroRealizado),
+        error: (erro) => this.processarFalha(erro)
+      });
   }
 
+  private processarSucesso(registroRealizado: TokenViewModel) {
+    console.log(registroRealizado);
+  }
+
+  private processarFalha(erro: any) {
+    console.log(erro);
+  }
 }
