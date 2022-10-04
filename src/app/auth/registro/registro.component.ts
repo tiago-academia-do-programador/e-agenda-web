@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from '../services/auth.service';
+import { LocalStorageService } from '../services/local-storage.service';
 import { RegistrarUsuarioViewModel } from '../view-models/registrar-usuario.view-model';
 import { TokenViewModel } from '../view-models/token.view-model';
 
@@ -19,7 +20,8 @@ export class RegistroComponent implements OnInit {
   constructor(
     titulo: Title,
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private localStorageService: LocalStorageService
   ) {
     titulo.setTitle('Registro - e-Agenda');
   }
@@ -62,7 +64,7 @@ export class RegistroComponent implements OnInit {
   }
 
   private processarSucesso(registroRealizado: TokenViewModel) {
-    console.log(registroRealizado);
+    this.localStorageService.salvarDadosLocaisUsuario(registroRealizado);
   }
 
   private processarFalha(erro: any) {
