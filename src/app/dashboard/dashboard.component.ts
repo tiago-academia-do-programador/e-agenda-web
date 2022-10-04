@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { UsuarioTokenViewModel } from '../auth/view-models/token.view-model';
 import { UsuarioService } from '../core/services/usuario.service';
@@ -12,7 +13,12 @@ import { UsuarioService } from '../core/services/usuario.service';
 export class DashboardComponent implements OnInit {
   public usuarioLogado$: Observable<UsuarioTokenViewModel | null>;
 
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(
+    titulo: Title,
+    private usuarioService: UsuarioService
+  ) {
+    titulo.setTitle('Dashboard - e-Agenda');
+  }
 
   ngOnInit(): void {
     this.usuarioLogado$ = this.usuarioService.usuarioLogado;
