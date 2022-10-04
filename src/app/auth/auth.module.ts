@@ -4,6 +4,7 @@ import { RegistroComponent } from './registro/registro.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { LocalStorageService } from './services/local-storage.service';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -11,7 +12,8 @@ import { LocalStorageService } from './services/local-storage.service';
   declarations: [RegistroComponent],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   providers: [AuthService, LocalStorageService]
 })

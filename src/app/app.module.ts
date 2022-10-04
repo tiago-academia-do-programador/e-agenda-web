@@ -8,6 +8,7 @@ import { NavbarModule } from './navbar/navbar.module';
 import { AuthModule } from './auth/auth.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './auth/services/auth.service';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { AuthService } from './auth/services/auth.service';
     HttpClientModule,
     NgbModule,
 
+    CoreModule,
     AuthModule,
     NavbarModule
   ],
