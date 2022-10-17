@@ -8,6 +8,8 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { RegistrarUsuarioViewModel } from '../view-models/registrar-usuario.view-model';
 import { TokenViewModel } from '../view-models/token.view-model';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
@@ -25,7 +27,8 @@ export class RegistroComponent implements OnInit {
     private authService: AuthService,
     private localStorageService: LocalStorageService,
     private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     titulo.setTitle('Registro - e-Agenda');
   }
@@ -56,7 +59,10 @@ export class RegistroComponent implements OnInit {
   }
 
   public registrar() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.toastr.warning('Por favor, preencha o formulário corretamente antes de prosseguir.', 'Aviso');
+      return;
+    };
 
     this.registroVM = Object.assign({}, this.registroVM, this.form.value);
 
@@ -74,6 +80,7 @@ export class RegistroComponent implements OnInit {
   }
 
   private processarFalha(erro: any) {
+    this.toastr.error(erro, 'Erro');
     console.log(erro);
   }
 }

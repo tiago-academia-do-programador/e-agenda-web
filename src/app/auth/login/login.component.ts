@@ -8,6 +8,8 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { AutenticarUsuarioViewModel } from '../view-models/autenticar-usuario.view-model';
 import { TokenViewModel } from '../view-models/token.view-model';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -25,7 +27,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private localStorageService: LocalStorageService,
     private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     titulo.setTitle('Login - e-Agenda');
   }
@@ -46,7 +49,10 @@ export class LoginComponent implements OnInit {
   }
 
   public login() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.toastr.warning('Por favor, preencha o formulário corretamente antes de prosseguir.', 'Aviso');
+      return;
+    }
 
     this.loginVM = Object.assign({}, this.loginVM, this.form.value);
 
@@ -66,6 +72,8 @@ export class LoginComponent implements OnInit {
   }
 
   private processarErro(erro: any) {
+
+    this.toastr.error(erro, 'Erro');
     console.log(erro);
   }
 }
