@@ -38,11 +38,11 @@
               <td>{{t.situacao }}</td>
 
               <td class="d-grid d-md-block">
-                <button [routerLink]="['/tarefas/editar', t.id]"
+                <button data-cy="btnEditar" [routerLink]="['/tarefas/editar', t.id]"
                   type="button" class="btn btn-sm btn-primary me-0 me-md-1 mb-1 mb-md-auto">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button [routerLink]="['/tarefas/excluir', t.id]"
+                <button data-cy="btnExcluir" [routerLink]="['/tarefas/excluir', t.id]"
                   type="button" class="btn btn-sm btn-outline-danger me-0 me-md-1 mb-1 mb-md-auto">
                   <i class="bi bi-trash"></i>
                 </button>

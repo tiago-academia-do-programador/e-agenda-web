@@ -13,7 +13,7 @@
       <form [formGroup]="formTarefa" class="mt-4">
         <div class="form-group mb-3 position-relative">
           <label class="form-label">Título:</label>
-          <input
+          <input data-cy="titulo"
             [ngClass]="titulo?.touched && titulo?.invalid ? 'is-invalid' : ''"
             formControlName="titulo"
             class="form-control"
@@ -28,7 +28,7 @@
 
         <div class="form-group mb-3 position-relative">
           <label class="form-label">Prioridade:</label>
-          <ng-select
+          <ng-select data-cy="prioridade"
             [ngClass]="prioridade?.touched && prioridade?.invalid ? 'is-invalid' : ''"
             formControlName="prioridade" [clearable]="false" [searchable]="false">
             <ng-option *ngFor="let prioridade of prioridades ; index as i" [value]="i" >
@@ -44,10 +44,10 @@
           <div class="form-group mt-3">
             <label class="form-label">Itens da Tarefa:</label>
             <div class="input-group mb-3">
-              <input formControlName="tituloItem"
+              <input data-cy="tituloItem" formControlName="tituloItem"
                 type="text" class="form-control" placeholder="Digite o título do item que compõe a tarefa" >
               <div class="input-group-append">
-                <button (click)="adicionarItem()"
+                <button data-cy="btnAdicionarItem" (click)="adicionarItem()"
                   class="btn btn-outline-primary rounded-0" type="button" >Adicionar</button>
               </div>
             </div>
@@ -63,11 +63,11 @@
             </tr>
             </thead>
             <tbody class="text-center">
-              <tr *ngFor="let item of tarefaFormVM.itens;">
+              <tr data-cy="itensTarefa"  *ngFor="let item of tarefaFormVM.itens;">
                 <td>{{item.titulo}}</td>
 
                 <td class="d-grid d-md-block">
-                  <button type="button" class="btn btn-sm btn-outline-danger me-0 me-md-1 mb-1 mb-md-auto" (click)="removerItem(item)">
+                  <button data-cy="btnRemoverItem" type="button" class="btn btn-sm btn-outline-danger me-0 me-md-1 mb-1 mb-md-auto" (click)="removerItem(item)">
                     <i class="bi bi-trash"></i>
                   </button>
                 </td>
@@ -80,7 +80,7 @@
 
 
         <div class="card-footer g-grid d-flex gap-1 mt-5">
-          <button (click)="gravar()"
+          <button data-cy="btnGravar" (click)="gravar()"
             type="button" class="btn btn-primary px-5">
             <i class="pi pi-save me-2"></i>
             Gravar

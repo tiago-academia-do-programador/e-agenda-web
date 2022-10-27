@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { TarefaService } from '../services/tarefa.service';
 import { FormsTarefaViewModel, ItemTarefaViewModel } from '../view-models/forms-tarefa.view-model';
 import { PrioridadeTarefaEnum } from '../view-models/prioridade-tarefa.enum';
@@ -25,7 +26,8 @@ export class EditarTarefaComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private tarefaService: TarefaService
+    private tarefaService: TarefaService,
+    private toastr: ToastrService
   ) {
     titulo.setTitle('Editar Tarefa - e-Agenda');
   }
@@ -97,7 +99,10 @@ export class EditarTarefaComponent implements OnInit {
   }
 
   public gravar() {
-    if (this.formTarefa.invalid) return;
+    if (this.formTarefa.invalid) {
+      this.toastr.warning('Por favor, preencha o formulário corretamente.', 'Aviso');
+      return;
+    }
 
     this.tarefaFormVM = Object.assign({}, this.tarefaFormVM, this.formTarefa.value);
 
@@ -110,11 +115,12 @@ export class EditarTarefaComponent implements OnInit {
   }
 
   private processarSucesso(tarefa: FormsTarefaViewModel) {
+    this.toastr.success('Tarefa editada com sucesso!', 'Sucesso');
     this.router.navigate(['/tarefas/listar']);
   }
 
   private processarFalha(erro: any) {
-    console.log(erro);
+    this.toastr.error(erro, 'Erro');
   }
 
 }
