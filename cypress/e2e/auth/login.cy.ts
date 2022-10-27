@@ -1,21 +1,23 @@
+import authSetup from "./util/auth.setup";
+
 describe('Processo de Login do Usuário', () => {
+  const form = authSetup.obterFormLogin();
+
   beforeEach(() => {
+    cy.limparDados();
     cy.visit('/');
   });
 
   it('Deve acessar a página', () => {
-    // assertion
     cy.title().should('contain', 'Login');
   });
 
   it('Deve autenticar usuário valido', () => {
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-    const btnEntrar = cy.get('button[type=submit]');
+    cy.registrar('Teste Login', 'teste.login@cypress.com', 'Teste@123', false);
 
-    inputEmail.type('tiago4@gmail.com');
-    inputSenha.type('Tiago@123');
-    btnEntrar.click();
+    form.email().type('teste.login@cypress.com');
+    form.senha().type('Teste@123');
+    form.btnEntrar().click();
 
     cy.wait(500);
 
@@ -23,14 +25,11 @@ describe('Processo de Login do Usuário', () => {
   });
 
   it('Deve notificar sobre formulário inválido', () => {
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-    const btnEntrar = cy.get('button[type=submit]');
 
-    inputEmail.type('tiago');
-    inputSenha.type('Teste@123');
+    form.email().type('tiago');
+    form.senha().type('Teste@123');
 
-    btnEntrar.click();
+    form.btnEntrar().click();
 
     cy.wait(300);
 
@@ -38,13 +37,9 @@ describe('Processo de Login do Usuário', () => {
   });
 
   it('Deve notificar credenciais inválidas', () => {
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-    const btnEntrar = cy.get('button[type=submit]');
-
-    inputEmail.type('tiago4@gmail.com');
-    inputSenha.type('Teste@123');
-    btnEntrar.click();
+    form.email().type('tiago4@gmail.com');
+    form.senha().type('Teste@123');
+    form.btnEntrar().click();
 
     cy.wait(300);
 
@@ -52,41 +47,29 @@ describe('Processo de Login do Usuário', () => {
   });
 
   it('Deve validar email vazio', () => {
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-
-    inputEmail.focus();
-    inputSenha.focus();
+    form.email().focus();
+    form.senha().focus();
 
     cy.contains('O email precisa ser preenchido.');
   });
 
   it('Deve validar email em formato inválido', () => {
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-
-    inputEmail.type('teste');
-    inputSenha.focus();
+    form.email().type('teste');
+    form.senha().focus();
 
     cy.contains('O email precisa seguir o formato "usuario@dominio.com".')
   });
 
   it('Deve validar senha vazia', () => {
-    const inputSenha = cy.get('[formControlName=senha]');
-    const btnEntrar = cy.get('button[type=submit]');
-
-    inputSenha.focus();
-    btnEntrar.focus();
+    form.senha().focus();
+    form.btnEntrar().focus();
 
     cy.contains('A senha precisa ser preenchida.');
   });
 
   it('Deve validar senha curta', () => {
-    const inputSenha = cy.get('[formControlName=senha]');
-    const btnEntrar = cy.get('button[type=submit]');
-
-    inputSenha.type('123');
-    btnEntrar.focus();
+    form.senha().type('123');
+    form.btnEntrar().focus();
 
     cy.contains('A senha deve ter no mínimo 6 caracteres.');
   });

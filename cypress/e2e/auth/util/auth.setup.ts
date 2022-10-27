@@ -8,6 +8,14 @@ class AuthSetup {
       btnRegistrar: () => cy.get('[data-cy=btnRegistrar]'),
     }
   }
+
+  obterFormLogin() {
+    return {
+      email: () => cy.get('[data-cy=email]'),
+      senha: () => cy.get('[data-cy=senha]'),
+      btnEntrar: () => cy.get('[data-cy=btnEntrar]')
+    }
+  }
 }
 
 export default new AuthSetup();

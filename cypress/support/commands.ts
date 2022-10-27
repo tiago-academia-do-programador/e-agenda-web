@@ -42,7 +42,7 @@ function registrar(
   if (!loginAutomatico)
     cy.logout();
 }
-
+ 
 function logout() {
   cy.contains('a', 'Sair')
     .click();

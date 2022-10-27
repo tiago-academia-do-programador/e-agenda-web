@@ -13,7 +13,6 @@ describe('Processo de Registro do Usuário', () => {
   });
 
   it('Deve notificar sobre formulário inválido', () => {
-    // Act
     form.nome().type('Testes Cypress');
     form.email().type('testador@cypress.com');
     form.senha().type('Teste');
@@ -22,7 +21,6 @@ describe('Processo de Registro do Usuário', () => {
 
     cy.wait(300);
 
-    // Assert
     cy.contains('Por favor preencha o formulário corretamente antes de prosseguir.');
   });
 
@@ -33,7 +31,6 @@ describe('Processo de Registro do Usuário', () => {
     form.confirmarSenha().type('Teste@123');
     form.btnRegistrar().click();
 
-    // Assert
     cy.wait(1000);
     cy.url().should('contain', 'dashboard');
   });
@@ -42,7 +39,6 @@ describe('Processo de Registro do Usuário', () => {
     cy.registrar('Teste', 'teste@cypress.com', 'Teste@123', false);
     cy.registrar('Teste', 'teste@cypress.com', 'Teste@123');
 
-    // cy.registrar({ nome: 'Teste', email: 'teste@cypress.com', senha: 'Teste@123' });
     cy.contains("Login 'teste@cypress.com' já está sendo utilizado.");
   });
 
