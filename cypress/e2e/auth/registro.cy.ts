@@ -1,6 +1,10 @@
+import authSetup from "./util/auth.setup";
+
 describe('Processo de Registro do Usuário', () => {
+  const form = authSetup.obterFormRegistro();
 
   beforeEach(() => {
+    cy.limparDados();
     cy.visit('conta/registrar');
   });
 
@@ -9,19 +13,12 @@ describe('Processo de Registro do Usuário', () => {
   });
 
   it('Deve notificar sobre formulário inválido', () => {
-    // Arrange
-    const inputNome = cy.get('[formControlName=nome]');
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-    const inputConfirmarSenha = cy.get('[formControlName=confirmarSenha]');
-    const btnRegistrar = cy.get('button[type=submit]');
-
     // Act
-    inputNome.type('Testes Cypress');
-    inputEmail.type('testador@cypress.com');
-    inputSenha.type('Teste');
-    inputConfirmarSenha.type('Teste');
-    btnRegistrar.click();
+    form.nome().type('Testes Cypress');
+    form.email().type('testador@cypress.com');
+    form.senha().type('Teste');
+    form.confirmarSenha().type('Teste');
+    form.btnRegistrar().click();
 
     cy.wait(300);
 
@@ -29,123 +26,75 @@ describe('Processo de Registro do Usuário', () => {
     cy.contains('Por favor preencha o formulário corretamente antes de prosseguir.');
   });
 
-  // it('Deve registrar e redirecionar novo usuário', () => {
-  //   // Arrange
-  //   const inputNome = cy.get('[formControlName=nome]');
-  //   const inputEmail = cy.get('[formControlName=email]');
-  //   const inputSenha = cy.get('[formControlName=senha]');
-  //   const inputConfirmarSenha = cy.get('[formControlName=confirmarSenha]');
-  //   const btnRegistrar = cy.get('button[type=submit]');
+  it('Deve registrar e redirecionar novo usuário', () => {
+    form.nome().type('Testes Cypress 2');
+    form.email().type('testador2@cypress.com');
+    form.senha().type('Teste@123');
+    form.confirmarSenha().type('Teste@123');
+    form.btnRegistrar().click();
 
-  //   // Act
-  //   inputNome.type('Testes Cypress 2');
-  //   inputEmail.type('testador2@cypress.com');
-  //   inputSenha.type('Teste@123');
-  //   inputConfirmarSenha.type('Teste@123');
-  //   btnRegistrar.click();
-
-  //   // Assert
-  //   cy.wait(1000);
-  //   cy.url().should('contain', 'dashboard');
-  // });
+    // Assert
+    cy.wait(1000);
+    cy.url().should('contain', 'dashboard');
+  });
 
   it('Deve notificar sobre usuário repetido', () => {
-    // Arrange
-    const inputNome = cy.get('[formControlName=nome]');
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-    const inputConfirmarSenha = cy.get('[formControlName=confirmarSenha]');
-    const btnRegistrar = cy.get('button[type=submit]');
+    cy.registrar('Teste', 'teste@cypress.com', 'Teste@123', false);
+    cy.registrar('Teste', 'teste@cypress.com', 'Teste@123');
 
-    // Act
-    inputNome.type('Testes Cypress');
-    inputEmail.type('testador@cypress.com');
-    inputSenha.type('Teste@123');
-    inputConfirmarSenha.type('Teste@123');
-    btnRegistrar.click();
-
-    cy.wait(300);
-
-    cy.contains("Login 'testador@cypress.com' já está sendo utilizado.");
+    // cy.registrar({ nome: 'Teste', email: 'teste@cypress.com', senha: 'Teste@123' });
+    cy.contains("Login 'teste@cypress.com' já está sendo utilizado.");
   });
 
   it('Deve notificar sobre senhas diferentes', () => {
-    // Arrange
-    const inputNome = cy.get('[formControlName=nome]');
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-    const inputConfirmarSenha = cy.get('[formControlName=confirmarSenha]');
-    const btnRegistrar = cy.get('button[type=submit]');
+    form.nome().type('Testes Cypress 3');
+    form.email().type('testador3@cypress.com');
+    form.senha().type('Testes@123');
+    form.confirmarSenha().type('Teste@123');
+    form.btnRegistrar().click();
 
-    // Act
-    inputNome.type('Testes Cypress 3');
-    inputEmail.type('testador3@cypress.com');
-    inputSenha.type('Testes@123');
-    inputConfirmarSenha.type('Teste@123');
-    btnRegistrar.click();
-
-    // Assert
     cy.wait(300);
-
     cy.contains('As senhas não conferem');
   });
 
   it('Deve validar nome vazio', () => {
-    const inputNome = cy.get('[formControlName=nome]');
-    const inputEmail = cy.get('[formControlName=email]');
-
-    inputNome.focus();
-    inputEmail.focus();
+    form.nome().focus();
+    form.email().focus();
 
     cy.contains('O nome precisa ser preenchido.');
   });
 
   it('Deve validar nome curto', () => {
-    const inputNome = cy.get('[formControlName=nome]');
-    const inputEmail = cy.get('[formControlName=email]');
-
-    inputNome.type('12');
-    inputEmail.focus();
+    form.nome().type('12');
+    form.email().focus();
 
     cy.contains('O nome deve ter no mínimo 3 caracteres.');
   });
 
   it('Deve validar email vazio', () => {
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-
-    inputEmail.focus();
-    inputSenha.focus();
+    form.email().focus();
+    form.senha().focus();
 
     cy.contains('O email precisa ser preenchido.');
   });
 
   it('Deve validar email em formato inválido', () => {
-    const inputEmail = cy.get('[formControlName=email]');
-    const inputSenha = cy.get('[formControlName=senha]');
-
-    inputEmail.type('teste');
-    inputSenha.focus();
+    form.email().type('teste');
+    form.senha().focus();
 
     cy.contains('O email precisa seguir o formato "usuario@dominio.com".');
   });
 
   it('Deve validar senha vazia', () => {
-    const inputSenha = cy.get('[formControlName=senha]');
-    const btnEntrar = cy.get('button[type=submit]');
-
-    inputSenha.focus();
-    btnEntrar.focus();
+    form.senha().focus();
+    form.btnRegistrar().focus();
 
     cy.contains('A senha precisa ser preenchida.');
   });
 
   it('Deve validar senha curta', () => {
-    const inputSenha = cy.get('[formControlName=senha]');
-    const btnEntrar = cy.get('button[type=submit]');
-
-    inputSenha.type('123');
-    btnEntrar.focus();
+    form.senha().type('123');
+    form.btnRegistrar().focus();
 
     cy.contains('A senha deve ter no mínimo 6 caracteres.');
   });
